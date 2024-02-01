@@ -52,11 +52,11 @@ def main():
 
     # Initialize the agent
     hyperparams = {
-        "gamma": 0.99,
+        "gamma": 0.999,
         "polyak": 0.999,  # 1.0 - tau (soft target update)
-        "lr": 1e-3,
-        "alpha": 0.2,
-        "batch_size": 32,
+        "lr": 1e-4,
+        "alpha": 0.1,
+        "batch_size": 256,
         "n_episodes": 10000,
         "update_after": 1000,
         "update_every": 50,

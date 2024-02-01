@@ -106,8 +106,8 @@ class AcEnv(gym.Env):
         dist_offcenter = get_distance_to_center_line(
             self.spline_points, world_loc_x, world_loc_y)
 
-        # Lap stays invalid as soon as it has been invalid once
-        lap_invalid = self._invalid_flag
+        # Lap stays invalid as soon as it has been invalid once (changed)
+        lap_invalid = 0#self._invalid_flag
         if data_dict['lap_invalid'] == 'True':
             lap_invalid = 1.0
         self._invalid_flag = lap_invalid
@@ -250,6 +250,26 @@ class AcEnv(gym.Env):
 
         return reward
 
+    def _get_reward_6(self, reward_off_track = -1):
+        """
+        A reward considering speed, angle and distance from center of track.
+        :return: The reward.
+        """
+        progress = self._observations[0]
+        previous_progress = self._observations[7]
+        delta_progress = progress - previous_progress
+        theta = self._observations[8]
+        dist_offcenter = self._observations[9]
+        lap_invalid = self._observations[5]
+
+        reward = math.cos(theta) - abs(math.sin(theta)) - \
+                 abs(dist_offcenter) + delta_progress
+
+        if lap_invalid:
+            reward += reward_off_track
+
+        return reward
+
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):
         """
         Reset the environment to initiate a new episode.
@@ -301,7 +321,7 @@ class AcEnv(gym.Env):
         reward = None
         info = None
         if not ignore_done:
-            reward = self._get_reward_5()
+            reward = self._get_reward_6()
             info = self._get_info()
 
         return observation, reward, terminated, truncated, info

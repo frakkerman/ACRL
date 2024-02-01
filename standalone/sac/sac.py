@@ -112,8 +112,8 @@ class SacAgent():
         step_duration_limit (int): The maximum duration of a single step in the environment in ms.
     """
 
-    def __init__(self, env: Env, exp_name, load_path=None, ac_kwargs=dict(hidden_sizes=[256]*2), seed=0, n_episodes=50,
-                 replay_size=int(1e6), gamma=0.99, polyak=0.995, lr=1e-3, alpha=0.2, batch_size=100, start_steps=10000,
+    def __init__(self, env: Env, exp_name, load_path=None, ac_kwargs=dict(hidden_sizes=[32]*2), seed=0, n_episodes=50,
+                 replay_size=int(1e6), gamma=0.999, polyak=0.995, lr=1e-4, alpha=0.2, batch_size=256, start_steps=10000,
                  update_after=1000, update_every=50, save_freq=1, step_duration_limit=None):
         self.env = env
         self.gamma = gamma
